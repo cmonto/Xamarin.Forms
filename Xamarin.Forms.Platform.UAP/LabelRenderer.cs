@@ -18,6 +18,8 @@ namespace Xamarin.Forms.Platform.UWP
 {
 	public static class FormattedStringExtensions
 	{
+		internal static readonly bool TextDecorationsApiPresent = Windows.Foundation.Metadata.ApiInformation.IsTypePresent(nameof(Windows.UI.Text.TextDecorations));
+
 		public static Run ToRun(this Span span)
 		{
 			var run = new Run { Text = span.Text ?? string.Empty };
@@ -30,8 +32,9 @@ namespace Xamarin.Forms.Platform.UWP
 				run.ApplyFont(span.Font);
 #pragma warning restore 618
 
-			if (span.IsSet(Span.TextDecorationsProperty))
-				run.TextDecorations = (Windows.UI.Text.TextDecorations)span.TextDecorations;
+			if (TextDecorationsApiPresent)
+				if (span.IsSet(Span.TextDecorationsProperty))
+					run.TextDecorations = (Windows.UI.Text.TextDecorations)span.TextDecorations;
 
 			run.CharacterSpacing = span.CharacterSpacing.ToEm();
 
@@ -191,17 +194,20 @@ namespace Xamarin.Forms.Platform.UWP
 			if (!Element.IsSet(Label.TextDecorationsProperty))
 				return;
 
-			var elementTextDecorations = Element.TextDecorations;
+			if (FormattedStringExtensions.TextDecorationsApiPresent)
+			{
+				var elementTextDecorations = Element.TextDecorations;
 
-			if ((elementTextDecorations & TextDecorations.Underline) == 0)
-				textBlock.TextDecorations &= ~Windows.UI.Text.TextDecorations.Underline;
-			else
-				textBlock.TextDecorations |= Windows.UI.Text.TextDecorations.Underline;
+				if ((elementTextDecorations & TextDecorations.Underline) == 0)
+					textBlock.TextDecorations &= ~Windows.UI.Text.TextDecorations.Underline;
+				else
+					textBlock.TextDecorations |= Windows.UI.Text.TextDecorations.Underline;
 
-			if ((elementTextDecorations & TextDecorations.Strikethrough) == 0)
-				textBlock.TextDecorations &= ~Windows.UI.Text.TextDecorations.Strikethrough;
-			else
-				textBlock.TextDecorations |= Windows.UI.Text.TextDecorations.Strikethrough;
+				if ((elementTextDecorations & TextDecorations.Strikethrough) == 0)
+					textBlock.TextDecorations &= ~Windows.UI.Text.TextDecorations.Strikethrough;
+				else
+					textBlock.TextDecorations |= Windows.UI.Text.TextDecorations.Strikethrough;
+			}
 
 			//TextDecorations are not updated in the UI until the text changes
 			if (textBlock.Inlines != null && textBlock.Inlines.Count > 0)

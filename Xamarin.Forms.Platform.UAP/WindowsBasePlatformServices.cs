@@ -26,6 +26,7 @@ namespace Xamarin.Forms.Platform.UWP
 {
 	internal abstract class WindowsBasePlatformServices : IPlatformServices
 	{
+		static readonly bool ActivationModeApiPresent = Windows.Foundation.Metadata.ApiInformation.IsPropertyPresent(typeof(CoreWindow).FullName, nameof(CoreWindow.ActivationMode));
 		const string WrongThreadError = "RPC_E_WRONG_THREAD";
 		readonly CoreDispatcher _dispatcher;
 
@@ -178,6 +179,26 @@ namespace Xamarin.Forms.Platform.UWP
 				{
 					// The current window is not the one we need 
 				}
+			}
+
+			if(ActivationModeApiPresent == false)
+			{
+				var dispatcher = CoreApplication.MainView?.CoreWindow?.Dispatcher;
+
+				if (dispatcher != null)
+				{
+					try
+					{
+						await TryDispatch(dispatcher, action);
+						return;
+					}
+					catch (Exception ex) when (ex.Message.Contains(WrongThreadError))
+					{
+						// The current window is not the one we need 
+					}
+				}
+
+				return;
 			}
 
 			// Either Window.Current was the wrong Dispatcher, or Window.Current was null because we're on a 

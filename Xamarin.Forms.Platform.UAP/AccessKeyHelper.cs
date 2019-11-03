@@ -8,6 +8,9 @@ namespace Xamarin.Forms.Platform.UWP
 {
 	static class AccessKeyHelper
 	{
+		static readonly bool KeyTipPlacementModeApiPresent = Windows.Foundation.Metadata.ApiInformation.IsPropertyPresent(typeof(UIElement).FullName, nameof(UIElement.KeyTipPlacementMode));
+		static readonly bool KeyTipHorizontalOffsetApiPresent = Windows.Foundation.Metadata.ApiInformation.IsPropertyPresent(typeof(UIElement).FullName, nameof(UIElement.KeyTipHorizontalOffset));
+		static readonly bool KeyTipVerticalOffsetApiPresent = Windows.Foundation.Metadata.ApiInformation.IsPropertyPresent(typeof(UIElement).FullName, nameof(UIElement.KeyTipVerticalOffset));
 
 		public static void UpdateAccessKey(FrameworkElement control, VisualElement element) {
 
@@ -17,6 +20,7 @@ namespace Xamarin.Forms.Platform.UWP
 				if (element.IsSet(VisualElementSpecifics.AccessKeyProperty))
 					control.AccessKey = windowsElement.GetAccessKey();
 
+				if (KeyTipPlacementModeApiPresent)
 				if (element.IsSet(VisualElementSpecifics.AccessKeyPlacementProperty))
 				{
 					switch (windowsElement.GetAccessKeyPlacement())
@@ -42,11 +46,13 @@ namespace Xamarin.Forms.Platform.UWP
 					}
 				}
 
-				if (element.IsSet(VisualElementSpecifics.AccessKeyHorizontalOffsetProperty))
-					control.KeyTipHorizontalOffset = windowsElement.GetAccessKeyHorizontalOffset();
+				if (KeyTipHorizontalOffsetApiPresent)
+					if (element.IsSet(VisualElementSpecifics.AccessKeyHorizontalOffsetProperty))
+						control.KeyTipHorizontalOffset = windowsElement.GetAccessKeyHorizontalOffset();
 
-				if (element.IsSet(VisualElementSpecifics.AccessKeyVerticalOffsetProperty))
-					control.KeyTipVerticalOffset = windowsElement.GetAccessKeyVerticalOffset();
+				if (KeyTipVerticalOffsetApiPresent)
+					if (element.IsSet(VisualElementSpecifics.AccessKeyVerticalOffsetProperty))
+						control.KeyTipVerticalOffset = windowsElement.GetAccessKeyVerticalOffset();
 			}
 		}
 	}

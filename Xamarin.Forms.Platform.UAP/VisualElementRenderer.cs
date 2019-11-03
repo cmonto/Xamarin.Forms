@@ -15,12 +15,13 @@ namespace Xamarin.Forms.Platform.UWP
 	public class VisualElementRenderer<TElement, TNativeElement> : Panel, IVisualNativeElementRenderer, IDisposable, IEffectControlProvider where TElement : VisualElement
 																																	  where TNativeElement : FrameworkElement
 	{
+		static readonly bool GettingFocusApiPresent = Windows.Foundation.Metadata.ApiInformation.IsEventPresent(typeof(UIElement).FullName, nameof(UIElement.GettingFocus));
 		string _defaultAutomationPropertiesName;
 		AccessibilityView? _defaultAutomationPropertiesAccessibilityView;
 		string _defaultAutomationPropertiesHelpText;
 		UIElement _defaultAutomationPropertiesLabeledBy;
 		bool _disposed;
-		FocusNavigationDirection focusDirection;
+		FocusNavigationDirection focusDirection = FocusNavigationDirection.Next;
 		EventHandler<VisualElementChangedEventArgs> _elementChangedHandlers;
 		event EventHandler<PropertyChangedEventArgs> _elementPropertyChanged;
 		event EventHandler _controlChanging;
@@ -158,7 +159,8 @@ namespace Xamarin.Forms.Platform.UWP
 			if (_control != null && this is IDontGetFocus)
 			{
 				_control.GotFocus += OnGotFocus;
-				_control.GettingFocus += OnGettingFocus;
+				if (GettingFocusApiPresent)
+					_control.GettingFocus += OnGettingFocus;
 			}
 
 			var controller = (IElementController)oldElement;
@@ -279,7 +281,8 @@ namespace Xamarin.Forms.Platform.UWP
 			if (_control != null)
 			{
 				_control.GotFocus -= OnGotFocus;
-				_control.GettingFocus -= OnGettingFocus;
+				if (GettingFocusApiPresent)
+					_control.GettingFocus -= OnGettingFocus;
 			}
 			SetNativeControl(null);
 			SetElement(null);

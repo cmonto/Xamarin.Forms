@@ -21,6 +21,7 @@ using Specifics = Xamarin.Forms.PlatformConfiguration.WindowsSpecific.ListView;
 using System.Collections.ObjectModel;
 using UwpScrollBarVisibility = Windows.UI.Xaml.Controls.ScrollBarVisibility;
 using WSelectionChangedEventArgs = Windows.UI.Xaml.Controls.SelectionChangedEventArgs;
+using System.Reflection;
 
 namespace Xamarin.Forms.Platform.UWP
 {
@@ -117,7 +118,7 @@ namespace Xamarin.Forms.Platform.UWP
 		bool IsObservableCollection(object source)
 		{
 			var type = source.GetType();
-			return type.IsGenericType &&
+			return type.GetTypeInfo().IsGenericType &&
 				   type.GetGenericTypeDefinition() == typeof(ObservableCollection<>);
 		}
 
@@ -776,7 +777,7 @@ namespace Xamarin.Forms.Platform.UWP
 		{
 			bool areEqual = false;
 
-			if (Element.SelectedItem != null && Element.SelectedItem.GetType().IsValueType)
+			if (Element.SelectedItem != null && Element.SelectedItem.GetType().GetTypeInfo().IsValueType)
 				areEqual = Element.SelectedItem.Equals(List.SelectedItem);
 			else
 				areEqual = Element.SelectedItem == List.SelectedItem;
