@@ -331,8 +331,7 @@ namespace Xamarin.Forms.Internals
 			Profile.FramePartition("Reflect");
 			foreach (Assembly assembly in assemblies)
 			{
-				var assemblyName = assembly.GetName().Name;
-				Profile.FrameBegin(assemblyName);
+				Profile.FrameBegin(assembly.GetName().Name);
 
 				foreach (Type attrType in attrTypes)
 				{
@@ -371,7 +370,7 @@ namespace Xamarin.Forms.Internals
 				Array.Copy(effectAttributes, typedEffectAttributes, effectAttributes.Length);
 				RegisterEffects(resolutionName, typedEffectAttributes);
 
-				Profile.FrameEnd(assemblyName);
+				Profile.FrameEnd();
 			}
 
 			if ((flags & InitializationFlags.DisableCss) == 0)

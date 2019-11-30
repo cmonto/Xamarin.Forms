@@ -10,7 +10,7 @@ namespace Xamarin.Forms.Platform.iOS
 		bool _isDisposed;
 		bool _isRefreshing;
 		bool _usingLargeTitles;
-		nfloat _originalY;
+		nfloat _origininalY;
 		nfloat _refreshControlHeight;
 		UIView _refreshControlParent;
 		UIRefreshControl _refreshControl;
@@ -111,9 +111,9 @@ namespace Xamarin.Forms.Platform.iOS
 					return true;
 
 				if (refreshing)
-					scrollView.SetContentOffset(new CoreGraphics.CGPoint(0, _originalY - _refreshControlHeight), true);
+					scrollView.SetContentOffset(new CoreGraphics.CGPoint(0, _origininalY - _refreshControlHeight), true);
 				else
-					scrollView.SetContentOffset(new CoreGraphics.CGPoint(0, _originalY), true);
+					scrollView.SetContentOffset(new CoreGraphics.CGPoint(0, _origininalY), true);
 
 				return true;
 			}
@@ -149,7 +149,7 @@ namespace Xamarin.Forms.Platform.iOS
 
 				scrollView.AlwaysBounceVertical = true;
 
-				_originalY = scrollView.ContentOffset.Y;
+				_origininalY = scrollView.ContentOffset.Y;
 				_refreshControlHeight = _refreshControl.Frame.Size.Height;
 
 				return true;

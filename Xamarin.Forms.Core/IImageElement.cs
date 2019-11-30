@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Text;
 
 namespace Xamarin.Forms
 {
@@ -14,6 +16,6 @@ namespace Xamarin.Forms
 
 		//note to implementor: but implement these methods explicitly
 		void RaiseImageSourcePropertyChanged();
-		void OnImageSourceSourceChanged(object sender, EventArgs e);
+		void OnImageSourcesSourceChanged(object sender, EventArgs e);
 	}
 }

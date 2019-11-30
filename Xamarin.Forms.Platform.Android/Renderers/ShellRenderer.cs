@@ -353,7 +353,7 @@ namespace Xamarin.Forms.Platform.Android
 				decorView.SetBackground(split);
 			}
 
-			Profile.FrameEnd("UpdtStatBarClr");
+			Profile.FrameEnd();
 		}
 
 		class SplitDrawable : Drawable

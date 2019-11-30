@@ -30,11 +30,6 @@ namespace Xamarin.Forms.Platform.Tizen
 				if (Control != null)
 				{
 					Control.TextBlockFocused -= OnTextBlockFocused;
-					if (Device.Idiom == TargetIdiom.TV)
-					{
-						Control.LayoutFocused -= OnLayoutFocused;
-						Control.LayoutUnfocused -= OnLayoutUnfocused;
-					}
 					CleanView();
 				}
 			}
@@ -51,15 +46,7 @@ namespace Xamarin.Forms.Platform.Tizen
 					InputPanelShowByOnDemand = true,
 				};
 				entry.SetVerticalTextAlignment("elm.text", 0.5);
-				entry.HorizontalTextAlignment = Native.TextAlignment.Center;
 				entry.TextBlockFocused += OnTextBlockFocused;
-
-				if (Device.Idiom == TargetIdiom.TV)
-				{
-					entry.LayoutFocused += OnLayoutFocused;
-					entry.LayoutUnfocused += OnLayoutUnfocused;
-				}
-
 				SetNativeControl(entry);
 			}
 			base.OnElementChanged(e);
@@ -99,16 +86,6 @@ namespace Xamarin.Forms.Platform.Tizen
 		void UpdateTitleColor()
 		{
 			Control.PlaceholderColor = Element.TitleColor.ToNative();
-		}
-
-		void OnLayoutFocused(object sender, EventArgs e)
-		{
-			Control.FontSize = Control.FontSize * 1.5;
-		}
-
-		void OnLayoutUnfocused(object sender, EventArgs e)
-		{
-			Control.FontSize = Control.FontSize / 1.5;
 		}
 
 		void OnTextBlockFocused(object sender, EventArgs e)

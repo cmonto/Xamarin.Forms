@@ -209,7 +209,7 @@ namespace Xamarin.Forms.Platform.MacOS
 			UpdateAlignment();
 			UpdateMaxLength();
 			UpdateIsReadOnly();
-		}
+        }
 
 		void TextFieldFocusChanged(object sender, BoolEventArgs e)
 		{
@@ -297,7 +297,7 @@ namespace Xamarin.Forms.Platform.MacOS
 
 		protected override void SetAccessibilityLabel()
 		{
-			if (_disposed || IsElementOrControlEmpty)
+			if (IsElementOrControlEmpty)
 				return;
 			Control.AccessibilityLabel = (string)Element?.GetValue(AutomationProperties.NameProperty) ?? Control.PlaceholderAttributedString?.Value;
 		}

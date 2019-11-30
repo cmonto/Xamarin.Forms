@@ -5,11 +5,12 @@ namespace Xamarin.Forms
 {
 	static class ImageElement
 	{
+
 		public static readonly BindableProperty ImageProperty = BindableProperty.Create("Image", typeof(ImageSource), typeof(IImageElement), default(ImageSource),
-			propertyChanging: OnImageSourceChanging, propertyChanged: OnImageSourceChanged);
+	propertyChanging: OnImageSourceChanging, propertyChanged: OnImageSourceChanged);
 
 		public static readonly BindableProperty SourceProperty = BindableProperty.Create(nameof(IImageElement.Source), typeof(ImageSource), typeof(IImageElement), default(ImageSource),
-			propertyChanging: OnImageSourceChanging, propertyChanged: OnImageSourceChanged);
+	propertyChanging: OnImageSourceChanging, propertyChanged: OnImageSourceChanged);
 
 		public static readonly BindableProperty AspectProperty = BindableProperty.Create(nameof(IImageElement.Aspect), typeof(Aspect), typeof(IImageElement), Aspect.AspectFit);
 
@@ -18,20 +19,24 @@ namespace Xamarin.Forms
 
 		static void OnImageSourceChanged(BindableObject bindable, object oldValue, object newValue)
 		{
-			var newSource = (ImageSource)newValue;
-			var image = (IImageElement)bindable;
+			ImageSource newSource = (ImageSource)newValue;
+			IImageElement image = (IImageElement)bindable;
 			if (newSource != null && image != null)
-				newSource.SourceChanged += image.OnImageSourceSourceChanged;
+			{
+				newSource.SourceChanged += image.OnImageSourcesSourceChanged;
+			}
 			ImageSourceChanged(bindable, newSource);
 		}
 
 		static void OnImageSourceChanging(BindableObject bindable, object oldValue, object newValue)
 		{
-			var oldSource = (ImageSource)oldValue;
-			var image = (IImageElement)bindable;
+			ImageSource oldSource = (ImageSource)oldValue;
+			IImageElement image = (IImageElement)bindable;
 
 			if (oldSource != null && image != null)
-				oldSource.SourceChanged -= image.OnImageSourceSourceChanged;
+			{
+				oldSource.SourceChanged -= image.OnImageSourcesSourceChanged;
+			}
 			ImageSourceChanging(oldSource);
 		}
 
@@ -126,15 +131,16 @@ namespace Xamarin.Forms
 			}
 		}
 
-		static void ImageSourceChanged(BindableObject bindable, ImageSource newSource)
+		public static void ImageSourceChanged(BindableObject bindable, ImageSource newSource)
 		{
-			var imageElement = (VisualElement)bindable;
-			if(newSource != null)
-				newSource.Parent = imageElement;
-			imageElement?.InvalidateMeasureInternal(InvalidationTrigger.MeasureChanged);
+			var visualElement = (VisualElement)bindable;
+			if (newSource != null)
+				BindableObject.SetInheritedBindingContext(newSource, visualElement?.BindingContext);
+
+			visualElement?.InvalidateMeasureInternal(InvalidationTrigger.MeasureChanged);
 		}
 
-		public static void ImageSourceSourceChanged(object sender, EventArgs e)
+		public static void ImageSourcesSourceChanged(object sender, EventArgs e)
 		{
 			if (sender is IImageElement imageController)
 				imageController.RaiseImageSourcePropertyChanged();

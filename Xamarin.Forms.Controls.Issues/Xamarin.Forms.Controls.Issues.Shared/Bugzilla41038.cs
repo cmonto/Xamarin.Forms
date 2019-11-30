@@ -65,12 +65,7 @@ namespace Xamarin.Forms.Controls.Issues
 			public ViewA()
 			{
 				Title = "ViewA";
-				Content = new Label() 
-				{ 
-					 Text = "Verify that the hamburger icon is visible. Click the icon and switch to ViewB. If the icon does not disappear, the test has passed.", 
-					 HorizontalTextAlignment = TextAlignment.Center, 
-					 VerticalTextAlignment = TextAlignment.Center 
-				};
+				Content = new Label() { Text = "View A" };
 			}
 		}
 

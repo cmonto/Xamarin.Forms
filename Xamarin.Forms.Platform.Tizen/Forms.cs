@@ -10,7 +10,6 @@ using Tizen.Applications;
 using TSystemInfo = Tizen.System.Information;
 using ELayout = ElmSharp.Layout;
 using DeviceOrientation = Xamarin.Forms.Internals.DeviceOrientation;
-using System.ComponentModel;
 
 namespace Xamarin.Forms
 {
@@ -28,22 +27,11 @@ namespace Xamarin.Forms
 			Context = application;
 			UseDeviceIndependentPixel = useDeviceIndependentPixel;
 			Handlers = handlers;
-			Assemblies = null;
-		}
-
-		public InitializationOptions(CoreApplication application, bool useDeviceIndependentPixel, params Assembly[] assemblies)
-		{
-			this = default(InitializationOptions);
-			Context = application;
-			UseDeviceIndependentPixel = useDeviceIndependentPixel;
-			Handlers = null;
-			Assemblies = assemblies;
 		}
 
 		public CoreApplication Context;
 		public bool UseDeviceIndependentPixel;
 		public HandlerAttribute[] Handlers;
-		public Assembly[] Assemblies;
 		public EffectScope[] EffectScopes;
 		public InitializationFlags Flags;
 	}
@@ -261,31 +249,18 @@ namespace Xamarin.Forms
 				if (maybeOptions.HasValue)
 				{
 					var options = maybeOptions.Value;
+					var handlers = options.Handlers;
+					var flags = options.Flags;
+					var effectScopes = options.EffectScopes;
 					_useDeviceIndependentPixel = options.UseDeviceIndependentPixel;
 
-					if (options.Assemblies != null)
-					{
-						TizenPlatformServices.AppDomain.CurrentDomain.AddAssemblies(options.Assemblies);
-					}
-
 					// renderers
-					if (options.Handlers != null)
+					if (handlers != null)
 					{
-						Registrar.RegisterRenderers(options.Handlers);
-					}
-					else
-					{
-						Registrar.RegisterAll(new Type[]
-						{
-							typeof(ExportRendererAttribute),
-							typeof(ExportImageSourceHandlerAttribute),
-							typeof(ExportCellAttribute),
-							typeof(ExportHandlerAttribute)
-						});
+						Registrar.RegisterRenderers(handlers);
 					}
 
 					// effects
-					var effectScopes = options.EffectScopes;
 					if (effectScopes != null)
 					{
 						for (var i = 0; i < effectScopes.Length; i++)
@@ -296,7 +271,6 @@ namespace Xamarin.Forms
 					}
 
 					// css
-					var flags = options.Flags;
 					var noCss = (flags & InitializationFlags.DisableCss) != 0;
 					if (!noCss)
 						Registrar.RegisterStylesheets();
@@ -445,19 +419,6 @@ namespace Xamarin.Forms
 		public static string GetProfile()
 		{
 			return s_profile.Value;
-		}
-
-
-		// for internal use only
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		public static void Preload()
-		{
-			Elementary.Initialize();
-			Elementary.ThemeOverlay();
-			var window = new PreloadedWindow();
-			var platform = new PreloadedPlatform(window.BaseLayout);
-			TSystemInfo.TryGetValue("http://tizen.org/feature/screen.width", out int width);
-			TSystemInfo.TryGetValue("http://tizen.org/feature/screen.height", out int height);
 		}
 	}
 

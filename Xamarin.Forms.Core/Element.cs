@@ -453,7 +453,8 @@ namespace Xamarin.Forms
 		{
 			base.OnSetDynamicResource(property, key);
 			DynamicResources[property] = key;
-			if (this.TryGetResource(key, out var value))
+			object value;
+			if (this.TryGetResource(key, out value))
 				OnResourceChanged(property, value);
 		}
 

@@ -2,7 +2,6 @@
 using Windows.UI.Xaml.Controls;
 using UWPApp = Windows.UI.Xaml.Application;
 using UWPControls = Windows.UI.Xaml.Controls;
-using WScrollMode = Windows.UI.Xaml.Controls.ScrollMode;
 
 namespace Xamarin.Forms.Platform.UWP
 {
@@ -56,7 +55,7 @@ namespace Xamarin.Forms.Platform.UWP
 				if (_orientation == Orientation.Horizontal)
 				{
 					ItemsPanel = (ItemsPanelTemplate)UWPApp.Current.Resources["HorizontalGridItemsPanel"];
-					ScrollViewer.SetHorizontalScrollMode(this, WScrollMode.Auto);
+					ScrollViewer.SetHorizontalScrollMode(this, ScrollMode.Auto);
 					ScrollViewer.SetHorizontalScrollBarVisibility(this, UWPControls.ScrollBarVisibility.Auto);
 				}
 				else

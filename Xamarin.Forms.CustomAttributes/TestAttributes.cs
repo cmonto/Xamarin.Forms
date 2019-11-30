@@ -550,9 +550,7 @@ namespace Xamarin.Forms.CustomAttributes
 		public enum Frame
 		{
 			OutlineColor,
-			HasShadow,
-			Content,
-			CornerRadius
+			HasShadow
 		}
 
 		public enum Image

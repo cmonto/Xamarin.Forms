@@ -775,14 +775,7 @@ namespace Xamarin.Forms.Platform.UWP
 
 		void OnControlSelectionChanged(object sender, WSelectionChangedEventArgs e)
 		{
-			bool areEqual = false;
-
-			if (Element.SelectedItem != null && Element.SelectedItem.GetType().GetTypeInfo().IsValueType)
-				areEqual = Element.SelectedItem.Equals(List.SelectedItem);
-			else
-				areEqual = Element.SelectedItem == List.SelectedItem;
-
-			if (!areEqual)
+			if (Element.SelectedItem != List.SelectedItem)
 			{
 				if (_itemWasClicked)
 					List.SelectedItem = Element.SelectedItem;

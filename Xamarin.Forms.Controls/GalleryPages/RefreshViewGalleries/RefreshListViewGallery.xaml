@@ -25,21 +25,19 @@
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
-                                <ScrollView>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="48" />
-                                            <ColumnDefinition Width="*" />
-                                        </Grid.ColumnDefinitions>
-                                        <BoxView
-                                            Grid.Column="0"
-                                            Color="{Binding Color}"
-                                            HeightRequest="48"/>
-                                        <Label
-                                            Grid.Column="1"
-                                            Text="{Binding Name}"/>
-                                    </Grid>
-                                </ScrollView>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="48" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <BoxView
+                                        Grid.Column="0"
+                                        Color="{Binding Color}"
+                                        HeightRequest="48"/>
+                                    <Label
+                                        Grid.Column="1"
+                                        Text="{Binding Name}"/>
+                                </Grid>
                             </ViewCell>
                         </DataTemplate>
                     </ListView.ItemTemplate>

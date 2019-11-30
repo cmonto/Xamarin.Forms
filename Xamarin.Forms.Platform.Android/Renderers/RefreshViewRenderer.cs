@@ -9,7 +9,6 @@ using Android.Views;
 using Android.Widget;
 using Xamarin.Forms.Internals;
 using AView = Android.Views.View;
-using AWebView = Android.Webkit.WebView;
 
 namespace Xamarin.Forms.Platform.Android
 {
@@ -171,13 +170,13 @@ namespace Xamarin.Forms.Platform.Android
 			}
 
 			if(view is RecyclerView recyclerView)
-				return recyclerView.ComputeVerticalScrollOffset() > 0;
+				return recyclerView.ScrollY < 0;
+
+			if (view is global::Android.Widget.ScrollView scrollview)
+				return scrollview.ScrollY < 0;
 
 			if (view is NestedScrollView nestedScrollView)
-				return nestedScrollView.ComputeVerticalScrollOffset() > 0;
-
-			if (view is AWebView webView)
-				return webView.ScrollY > 0;
+				return nestedScrollView.ScrollY < 0;
 
 			return true;
 		}

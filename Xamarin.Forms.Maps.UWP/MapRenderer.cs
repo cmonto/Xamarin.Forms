@@ -35,12 +35,11 @@ namespace Xamarin.Forms.Maps.UWP
 
 				if (Control == null)
 				{
-					SetNativeControl(new MapControl()); 
+					SetNativeControl(new MapControl());
 					Control.MapServiceToken = FormsMaps.AuthenticationToken;
 					Control.ZoomLevelChanged += async (s, a) => await UpdateVisibleRegion();
 					Control.CenterChanged += async (s, a) => await UpdateVisibleRegion();
 					Control.MapTapped += OnMapTapped;
-					Control.LayoutUpdated += OnLayoutUpdated; 
 				}
 
 				MessagingCenter.Subscribe<Map, MapSpan>(this, "MapMoveToRegion", async (s, a) => await MoveToRegion(a), mapModel);
@@ -62,17 +61,6 @@ namespace Xamarin.Forms.Maps.UWP
 
 				await Control.Dispatcher.RunIdleAsync(async (i) => await MoveToRegion(mapModel.LastMoveToRegion, MapAnimationKind.None));
 				await UpdateIsShowingUser();
-			}
-		}
-
-		bool _isRegionUpdatePending;
-
-		async void OnLayoutUpdated(object sender, object e)
-		{
-			if (_isRegionUpdatePending)
-			{
-				// _isRegionUpdatePending is set to false when the update is successfull
-				await MoveToRegion(Element.LastMoveToRegion, MapAnimationKind.None);
 			}
 		}
 
@@ -105,12 +93,6 @@ namespace Xamarin.Forms.Maps.UWP
 				{
 					((ObservableCollection<Pin>)Element.Pins).CollectionChanged -= OnPinCollectionChanged;
 					((ObservableCollection<MapElement>)Element.MapElements).CollectionChanged -= OnMapElementCollectionChanged;
-				}
-
-				if (Control != null)
-				{
-					Control.LayoutUpdated -= OnLayoutUpdated;
-					Control.MapTapped -= OnMapTapped;
 				}
 			}
 
@@ -260,7 +242,7 @@ namespace Xamarin.Forms.Maps.UWP
 			{
 				return new Geopath(new[]
 				{
-					new BasicGeoposition(),
+					new BasicGeoposition(), 
 				});
 			}
 		}
@@ -393,7 +375,7 @@ namespace Xamarin.Forms.Maps.UWP
 				Longitude = span.Center.Longitude + span.LongitudeDegrees / 2
 			};
 			var boundingBox = new GeoboundingBox(nw, se);
-			_isRegionUpdatePending = !await Control.TrySetViewBoundsAsync(boundingBox, null, animation); 
+			await Control.TrySetViewBoundsAsync(boundingBox, null, animation);
 		}
 
 		async Task UpdateVisibleRegion()

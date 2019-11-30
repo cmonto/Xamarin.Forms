@@ -34,11 +34,9 @@ namespace Xamarin.Forms.Controls
 			var btn8 = new Button { Text = "Toggle Orientation" };
 			var btn9 = new Button { Text = "Default Scroll Bar Visibility" };
 
-			var labelStack = new StackLayout { Orientation = StackOrientation.Horizontal };
 			var label = new Label { Text = string.Format ("X: {0}, Y: {1}", 0, 0) };
-			var scrollStatusLabel = new Label { Text = string.Empty };
 			
-			root.Children.Add (labelStack);
+			root.Children.Add (label);
 			root.Children.Add (btnStack);
 			root.Children.Add (btnStack1);
 
@@ -51,9 +49,6 @@ namespace Xamarin.Forms.Controls
 
 			btnStack1.Children.Add (btn);
 			btnStack1.Children.Add (btn4);
-
-			labelStack.Children.Add(label);
-			labelStack.Children.Add(scrollStatusLabel);
 
 			Grid.SetRow (btnStack, 1);
 			Grid.SetRow (btnStack1, 2);
@@ -78,7 +73,6 @@ namespace Xamarin.Forms.Controls
 			};
 
 			btn.Clicked += async (object sender, EventArgs e) => {
-				scrollStatusLabel.Text = "scrolling";
 				switch (orientation) {
 					case ScrollOrientation.Horizontal:
 						await _scrollview.ScrollToAsync (100, 0, true);
@@ -90,7 +84,6 @@ namespace Xamarin.Forms.Controls
 						await _scrollview.ScrollToAsync (100, 100, true);
 						break;
 				}
-				scrollStatusLabel.Text = "completed";
 			};
 			btn4.Clicked += async (object sender, EventArgs e) => {
 				switch (orientation) {

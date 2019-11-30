@@ -98,8 +98,7 @@ namespace Xamarin.Forms.Platform.iOS
 			var currentElement = VisualElementRenderer?.Element;
 
 			// Bind the view to the data item
-			if (currentElement != null)
-				currentElement.BindingContext = bindingContext;
+			currentElement.BindingContext = bindingContext;
 
 			if (template != _currentTemplate)
 			{

@@ -228,7 +228,7 @@ namespace Xamarin.Forms.Platform.iOS
 			_textField.VerticalAlignment = Element.VerticalTextAlignment.ToNativeTextAlignment();
 		}
 
-		public virtual void UpdateCancelButton()
+		void UpdateCancelButton()
 		{
 			Control.ShowsCancelButton = !string.IsNullOrEmpty(Control.Text);
 

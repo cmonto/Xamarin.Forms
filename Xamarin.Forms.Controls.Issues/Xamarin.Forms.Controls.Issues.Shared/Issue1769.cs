@@ -1,41 +1,52 @@
-﻿using Xamarin.Forms.CustomAttributes;
-using Xamarin.Forms.Internals;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-#if UITEST
-using NUnit.Framework;
-using Xamarin.Forms.Core.UITests;
-#endif
+using Xamarin.Forms.CustomAttributes;
+using Xamarin.Forms.Internals;
 
 namespace Xamarin.Forms.Controls.Issues
 {
-#if UITEST
-	[NUnit.Framework.Category(UITestCategories.Switch)]
-#endif
-	[Preserve(AllMembers = true)]
-	[Issue(IssueTracker.Github, 1769, "PushAsync with Switch produces NRE", PlatformAffected.Android)]
-	public class Issue1769 : TestContentPage
+	[Preserve (AllMembers=true)]
+	[Issue (IssueTracker.Github, 1769, "PushAsync with Switch produces NRE", PlatformAffected.Android)]
+	public class Issue1769
+		: ContentPage
 	{
-		const string GoToPageTwoButtonText = "Go To Page 2";
-		const string SwitchLabelText = "Switch";
-		const string SwitchAutomatedId = nameof(SwitchAutomatedId);
-		const string SwitchIsNowLabelTextFormat = "Switch is now {0}";
+		public Issue1769()
+		{
+			var button =  new Button()
+				{
+					Text = "Go To Page 2"
+				};
+
+			var switchDemo = new SwitchDemoPage();
+
+			button.Clicked += async (sender, args) => {
+				await ((Button)sender).Navigation.PushAsync(switchDemo);
+			};
+
+			Content = button;
+		}
 
 		class SwitchDemoPage : ContentPage
 		{
-			readonly Label _label;
+			Label _label;
 
 			public SwitchDemoPage()
 			{
-				var header = new Label
+				Label header = new Label
 				{
-					Text = SwitchLabelText,
-					FontSize = 50,
+					Text = "Switch",
+#pragma warning disable 618
+					Font = Font.BoldSystemFontOfSize(50),
+#pragma warning restore 618
 					HorizontalOptions = LayoutOptions.Center
 				};
 
-				var switcher = new Switch
+				Switch switcher = new Switch
 				{
-					AutomationId = SwitchAutomatedId,
 					HorizontalOptions = LayoutOptions.Center,
 					VerticalOptions = LayoutOptions.CenterAndExpand
 				};
@@ -43,8 +54,10 @@ namespace Xamarin.Forms.Controls.Issues
 
 				_label = new Label
 				{
-					Text = string.Format(SwitchIsNowLabelTextFormat, switcher.IsToggled),
-					FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
+					Text = "Switch is now False",
+#pragma warning disable 618
+					Font = Font.SystemFontOfSize(NamedSize.Large),
+#pragma warning restore 618
 					HorizontalOptions = LayoutOptions.Center,
 					VerticalOptions = LayoutOptions.CenterAndExpand
 				};
@@ -66,36 +79,8 @@ namespace Xamarin.Forms.Controls.Issues
 
 			void switcher_Toggled(object sender, ToggledEventArgs e)
 			{
-				_label.Text = string.Format(SwitchIsNowLabelTextFormat, e.Value);
+				_label.Text = string.Format("Switch is now {0}", e.Value);
 			}
 		}
-
-		protected override void Init()
-		{
-			var button = new Button()
-			{
-				Text = GoToPageTwoButtonText
-			};
-			button.Clicked += async (sender, args) =>
-			{
-				await ((Button)sender).Navigation.PushAsync(new SwitchDemoPage());
-			};
-
-			Content = button;
-		}
-
-#if UITEST
-		[Test]
-		public void Issue1769Test()
-		{
-			RunningApp.WaitForElement(q => q.Marked(GoToPageTwoButtonText));
-			RunningApp.Tap(q => q.Marked(GoToPageTwoButtonText));
-
-			RunningApp.WaitForElement(q => q.Marked(SwitchAutomatedId));
-			RunningApp.WaitForElement(q => q.Marked(string.Format(SwitchIsNowLabelTextFormat, false)));
-			RunningApp.Tap(q => q.Marked(SwitchAutomatedId));
-			RunningApp.WaitForElement(q => q.Marked(string.Format(SwitchIsNowLabelTextFormat, true)));
-		}
-#endif
 	}
 }

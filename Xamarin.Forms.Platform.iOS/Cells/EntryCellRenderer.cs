@@ -125,7 +125,7 @@ namespace Xamarin.Forms.Platform.iOS
 			cell.TextField.Text = entryCell.Text;
 		}
 
-		public class EntryCellTableViewCell : CellTableViewCell
+		class EntryCellTableViewCell : CellTableViewCell
 		{
 			public EntryCellTableViewCell(string cellName) : base(UITableViewCellStyle.Value1, cellName)
 			{

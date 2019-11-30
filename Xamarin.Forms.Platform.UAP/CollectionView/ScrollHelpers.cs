@@ -13,7 +13,7 @@ namespace Xamarin.Forms.Platform.UWP
 
 		static bool IsVertical(ScrollViewer scrollViewer)
 		{
-			return scrollViewer.HorizontalScrollMode == Windows.UI.Xaml.Controls.ScrollMode.Disabled;
+			return scrollViewer.HorizontalScrollMode == ScrollMode.Disabled;
 		}
 
 		static UWPPoint AdjustToMakeVisible(UWPPoint point, UWPSize itemSize, ScrollViewer scrollViewer)

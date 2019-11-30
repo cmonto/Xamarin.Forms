@@ -9,9 +9,6 @@ namespace Xamarin.Forms.Platform.Tizen.Native
 		public event EventHandler TextBlockFocused;
 		public event EventHandler TextBlockUnfocused;
 
-		public event EventHandler LayoutFocused;
-		public event EventHandler LayoutUnfocused;
-
 		public bool IsTextBlockFocused => _isTexstBlockFocused;
 
 		ELayout _editfieldLayout;
@@ -94,6 +91,14 @@ namespace Xamarin.Forms.Platform.Tizen.Native
 			return _editfieldLayout;
 		}
 
+		protected ELayout EditfieldLayout
+		{
+			get
+			{
+				return _editfieldLayout;
+			}
+		}
+
 		protected virtual ELayout CreateEditFieldLayout(EvasObject parent)
 		{
 			var layout = new ELayout(parent);
@@ -103,13 +108,11 @@ namespace Xamarin.Forms.Platform.Tizen.Native
 			{
 				SetFocusOnTextBlock(false);
 				layout.SignalEmit("elm,state,unfocused", "");
-				LayoutUnfocused?.Invoke(this, EventArgs.Empty);
 			};
 			layout.Focused += (s, e) =>
 			{
 				AllowFocus(false);
 				layout.SignalEmit("elm,state,focused", "");
-				LayoutFocused?.Invoke(this, EventArgs.Empty);
 			};
 
 			layout.KeyDown += (s, e) =>

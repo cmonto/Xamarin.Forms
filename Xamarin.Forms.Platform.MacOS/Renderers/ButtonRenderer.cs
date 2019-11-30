@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using AppKit;
-using CoreGraphics;
 using Foundation;
 
 namespace Xamarin.Forms.Platform.MacOS
@@ -10,27 +9,6 @@ namespace Xamarin.Forms.Platform.MacOS
 	{
 		class FormsNSButton : NSButton
 		{
-			class FormsNSButtonCell : NSButtonCell
-			{
-				public override CGRect DrawTitle(NSAttributedString title, CGRect frame, NSView controlView)
-				{
-					if (controlView is FormsNSButton button)
-					{
-						var paddedFrame = new CGRect(frame.X + button._leftPadding,
-							frame.Y + button._topPadding,
-							frame.Width - button._leftPadding - button._rightPadding,
-							frame.Height - button._topPadding - button._bottomPadding);
-						return base.DrawTitle(title, paddedFrame, controlView);
-					}
-					return base.DrawTitle(title, frame, controlView);
-				}
-			}
-
-			public FormsNSButton()
-			{
-				Cell = new FormsNSButtonCell();
-			}
-
 			public event Action Pressed;
 
 			public event Action Released;
@@ -42,30 +20,6 @@ namespace Xamarin.Forms.Platform.MacOS
 				base.MouseDown(theEvent);
 
 				Released?.Invoke();
-			}
-
-			nfloat _leftPadding;
-			nfloat _topPadding;
-			nfloat _rightPadding;
-			nfloat _bottomPadding;
-
-			internal void UpdatePadding(Thickness padding)
-			{
-				_leftPadding = (nfloat)padding.Left;
-				_topPadding = (nfloat)padding.Top;
-				_rightPadding = (nfloat)padding.Right;
-				_bottomPadding = (nfloat)padding.Bottom;
-
-				InvalidateIntrinsicContentSize();
-			}
-
-			public override CGSize IntrinsicContentSize
-			{
-				get
-				{
-					var baseSize = base.IntrinsicContentSize;
-					return new CGSize(baseSize.Width + _leftPadding + _rightPadding, baseSize.Height + _topPadding + _bottomPadding);
-				}
 			}
 		}
 
@@ -105,7 +59,6 @@ namespace Xamarin.Forms.Platform.MacOS
 				UpdateFont();
 				UpdateBorder();
 				UpdateImage();
-				UpdatePadding();
 			}
 		}
 
@@ -125,8 +78,6 @@ namespace Xamarin.Forms.Platform.MacOS
 				UpdateBackgroundVisibility();
 			else if (e.PropertyName == Button.ImageSourceProperty.PropertyName)
 				UpdateImage();
-			else if (e.PropertyName == Button.PaddingProperty.PropertyName)
-				UpdatePadding();
 		}
 
 		void OnButtonActivated(object sender, EventArgs eventArgs)
@@ -188,11 +139,6 @@ namespace Xamarin.Forms.Platform.MacOS
 				var textWithColor = new NSAttributedString(Element.Text ?? "", font: Element.Font.ToNSFont(), foregroundColor: color.ToNSColor(), paragraphStyle: new NSMutableParagraphStyle() { Alignment = NSTextAlignment.Center });
 				Control.AttributedTitle = textWithColor;
 			}
-		}
-
-		void UpdatePadding()
-		{
-			(Control as FormsNSButton)?.UpdatePadding(Element.Padding);
 		}
 
 		void HandleButtonPressed()

@@ -10,7 +10,6 @@ using Android.Text;
 using Android.Text.Method;
 using Android.Util;
 using Android.Widget;
-using Android.Views;
 using AView = Android.Views.View;
 
 namespace Xamarin.Forms.Platform.Android
@@ -61,8 +60,7 @@ namespace Xamarin.Forms.Platform.Android
 
 		protected override SearchView CreateNativeControl()
 		{
-			var context = (Context as ContextThemeWrapper).BaseContext ?? Context;
-			return new SearchView(context);
+			return new SearchView(Context);
 		}
 
 		protected override void OnFocusChangeRequested(object sender, VisualElement.FocusRequestArgs e)
