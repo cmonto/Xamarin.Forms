@@ -1,0 +1,1 @@
+nuget pack Xamarin.Forms.UAP.nuspec -Properties configuration=Release;version=4.3.0.991211
